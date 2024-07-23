@@ -1,0 +1,38 @@
+---
+- name: Test EKS Connection
+  hosts: ansible_controller
+  gather_facts: false
+  tasks:
+    - name: Ensure kubectl is installed
+      ansible.builtin.pip:
+        name: kubernetes
+        state: present
+
+    - name: Display AWS connection information
+      debug:
+        msg:
+          - "AWS Region: {{ lookup('env', 'AWS_DEFAULT_REGION') }}"
+          - "Instance ID: {{ ansible_host }}"
+
+    - name: Get EKS cluster info
+      shell: aws eks get-token --cluster-name staging-jenkins-cluster | kubectl get nodes
+      register: eks_info
+
+    - name: Display EKS info
+      debug:
+        var: eks_info.stdout_lines
+
+- name: Test Local EKS Operations
+  hosts: eks_cluster
+  gather_facts: false
+  tasks:
+    - name: List Kubernetes namespaces
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        state: list
+      register: namespaces
+
+    - name: Display namespaces
+      debug:
+        var: namespaces.resources
