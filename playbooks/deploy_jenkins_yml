@@ -1,8 +1,0 @@
----
-- name: Deploy Jenkins to EKS
-  hosts: eks_cluster
-  gather_facts: false
-  vars_files:
-    - "../vars/jenkins_vars.yml"
-  roles:
-    - jenkins
