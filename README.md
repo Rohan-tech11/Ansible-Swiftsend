@@ -63,8 +63,6 @@ Region: ca-central-1
 
 
 
-## License
-[Add your license information here]
 
 ## Contact
 email-id:mogaralarohan12345@gmail.com
